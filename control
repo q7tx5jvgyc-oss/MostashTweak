@@ -1,8 +1,8 @@
 Package: com.mostash.tweak
 Name: MostashTweak
-Version: 1.0
+Version: 1.0.0
 Architecture: iphoneos-arm64
-Description: Floating UI Control Panel
+Description: Stable tweak build
 Maintainer: Mostash
 Author: Mostash
 Section: Tweaks
