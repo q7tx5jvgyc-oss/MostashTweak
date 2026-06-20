@@ -4,40 +4,40 @@ static UIView *floatingButton;
 static UIView *panel;
 static BOOL panelVisible = NO;
 
-#pragma mark - ===== الحصول على النافذة بشكل صحيح =====
+#pragma mark - ===== Window Helper (FIXED iOS 15+) =====
 
 static UIWindow *getKeyWindow() {
 
-    UIWindow *foundWindow = nil;
+    UIWindow *keyWindow = nil;
 
-    for (UIWindowScene *scene in UIApplication.sharedApplication.connectedScenes) {
+    for (UIScene *scene in UIApplication.sharedApplication.connectedScenes) {
 
-        if (scene.activationState == UISceneActivationStateForegroundActive) {
+        if (scene.activationState != UISceneActivationStateForegroundActive)
+            continue;
 
-            for (UIWindow *window in scene.windows) {
+        if (![scene isKindOfClass:[UIWindowScene class]])
+            continue;
 
-                if (window.isKeyWindow) {
-                    foundWindow = window;
-                    break;
-                }
+        UIWindowScene *ws = (UIWindowScene *)scene;
+
+        for (UIWindow *w in ws.windows) {
+            if (w.isKeyWindow) {
+                keyWindow = w;
+                break;
             }
         }
+
+        if (keyWindow) break;
     }
 
-    if (!foundWindow) {
-        foundWindow = UIApplication.sharedApplication.windows.firstObject;
-    }
-
-    return foundWindow;
+    return keyWindow;
 }
 
 #pragma mark - ===== Floating Button =====
 
 static void handleDrag(UIPanGestureRecognizer *pan) {
-
     UIWindow *window = getKeyWindow();
     CGPoint point = [pan locationInView:window];
-
     floatingButton.center = point;
 }
 
